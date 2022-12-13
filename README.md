@@ -1,32 +1,18 @@
-```shell
-#  microsoft azure
-# https://docs.microsoft.com/en-us/cli/azure/install-azure-cli
-az account set --subscription 495322cb-95ae-4e66-b31d-1ea25d0b4ada
-az aks get-credentials --resource-group k8s-aks-owshq-dev --name aks-owshq-dev
+# big_data_k8s
 
-# google gcp
-# https://cloud.google.com/sdk/gcloud
-gcloud container clusters get-credentials silver-charmer-243611-gke --region us-central1
+## k3d Kubernetes Cluster
+- `k3d cluster create bigdatak8s --volume $HOME/bigdatak8s:/var/lib/rancher/k3s/storage@all -s 1 --servers-memory 4Gb -a 3 --agents-memory 12Gb --api-port 6443 -p 8081:80@loadbalancer`
+  - storage class: local-path em $HOME/bigdatak8s
+  - 1 control plane - 4Gb
+  - 3 worker node - 12Gb
+  - port-foward 80 para 8081
 
-# digital ocean
-# https://docs.digitalocean.com/reference/doctl/how-to/install/
-doctl kubernetes cluster kubeconfig save 69aa8706-603d-46a4-8804-def3733675c0
-
-# linode
-# https://www.linode.com/docs/guides/linode-cli/
-cluster_id=44470
-linode-cli lke clusters-list
-linode-cli lke kubeconfig-view $cluster_id
-
-# local kube config
-kubectl config view
-$HOME/.kube/config
-```
-
-```shell
-# microsoft azure aks cost
-# 7 = virtual machines (ds3v2)
-# 4 vcpus & 14 gb of ram
-# 1,170.19
-# ~ R$ 10.000
-```
+## Argo CD
+- `helm upgrade --install -f https://raw.githubusercontent.com/andreyolv/big_data_k8s/main/repository/helm-charts/argo-cd/values.yaml argocd argo/argo-cd --namespace cicd --debug --timeout 10m0s`
+- Alterado o values para usar ingress (params.server.insecure: true,params.server.rootpath: '/argocd')
+- watch kubectl get all -n cicd
+- App of Apps: kubectl apply -f https://raw.githubusercontent.com/andreyolv/big_data_k8s/main/example.yaml
+- [http://127.0.0.1:8081/argocd/login](http://127.0.0.1:8081/argocd/login)
+- user: admin
+- password: `kubectl -n cicd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d  | more`
+- caso algo fique como degraded basta deletar, o argo irá recriar novamente. Apenas não delete o cicd/k8sexample
