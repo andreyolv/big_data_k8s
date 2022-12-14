@@ -10,9 +10,13 @@
 ## Argo CD
 - Helm chart do ArgoCD baixado e yaml values alterado para usar ingress (params.server.insecure: true,params.server.rootpath: '/argocd')
 - Atualiza o ArgoCD com yaml values alterado:
-    - `helm upgrade --install -f https://raw.githubusercontent.com/andreyolv/big_data_k8s/main/repository/helm-charts/argo-cd/values.yaml argocd argo/argo-cd --namespace cicd --debug --timeout 10m0s`
+```sh 
+helm upgrade --install -f https://raw.githubusercontent.com/andreyolv/big_data_k8s/main/repository/helm-charts/argo-cd/values.yaml argocd argo/argo-cd --namespace cicd --debug --timeout 10m0s
+```
 - Aplica o yaml abaixo para usar ingress:
-'''sh k apply -f repository/svc-lbs/svc_ingress_argocd.yaml'''
+```sh 
+    k apply -f repository/svc-lbs/svc_ingress_argocd.yaml
+```
 - Olhar cluster:
     - kubectl get all -n cicd
 - App of Apps: kubectl apply -f https://raw.githubusercontent.com/andreyolv/big_data_k8s/main/bigdatak8s.yaml
