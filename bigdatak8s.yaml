@@ -9,7 +9,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: "https://github.com/andryeolv/big_data_k8s.git"
+    repoURL: "https://github.com/andreyolv/big_data_k8s.git"
     path: repository/manifests
     targetRevision: HEAD
     # directory
