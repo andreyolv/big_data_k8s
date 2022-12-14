@@ -1,5 +1,8 @@
 # big_data_k8s
 
+## [Install prereqs](prereq.md)
+![prereq](imgs/prereq.png)
+
 ## k3d Kubernetes Cluster
 ```sh 
 k3d cluster create bigdatak8s --volume $HOME/bigdatak8s:/var/lib/rancher/k3s/storage@all -s 1 --servers-memory 4Gb -a 3 --agents-memory 12Gb --api-port 6443 -p 8081:80@loadbalancer
@@ -10,6 +13,15 @@ k3d cluster create bigdatak8s --volume $HOME/bigdatak8s:/var/lib/rancher/k3s/sto
   - port-foward 80 para 8081
 
 ## Argo CD
+- kubectx k3d-bigdata
+- alias k=kubectl
+- Create namespaces:
+```sh
+k create namespace cicd
+k create namespace database
+k create namespace ingestion
+k create namespace orchestrator
+```
 - Helm chart do ArgoCD baixado e yaml values alterado para usar ingress (params.server.insecure: true,params.server.rootpath: '/argocd')
 - Atualiza o ArgoCD com yaml values alterado:
 ```sh 
