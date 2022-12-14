@@ -21,12 +21,13 @@ k apply -f repository/svc-lbs/svc_ingress_argocd.yaml
 ```
 - Olhar cluster:
 ```sh 
-kubectl get all -n cicd
+watch kubectl get all -n cicd
 ```
 - App of Apps: 
 ```sh 
 kubectl apply -f https://raw.githubusercontent.com/andreyolv/big_data_k8s/main/bigdatak8s.yaml
 ```
+- Pega o IP do cluster com k get endpoins -n default e trocar em .kube/config
 - Loga no ArgoCD: [http://127.0.0.1:8081/argocd/login](http://127.0.0.1:8081/argocd/login)
   - user: admin
   - password: 
@@ -34,3 +35,11 @@ kubectl apply -f https://raw.githubusercontent.com/andreyolv/big_data_k8s/main/b
   kubectl -n cicd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d  | more
   ```
 - Caso algo fique como degraded basta deletar, o argo irá recriar novamente. Apenas não delete o cicd/k8sexample
+- Pausar o cluster para continuar outro dia:
+```sh
+k3d cluster stop bigdatak8s
+```
+- Reativar o cluster a partir de onde parou sem perder nada:
+```sh
+k3d cluster start bigdatak8s
+```
