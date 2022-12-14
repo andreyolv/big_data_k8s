@@ -15,12 +15,17 @@ helm upgrade --install -f https://raw.githubusercontent.com/andreyolv/big_data_k
 ```
 - Aplica o yaml abaixo para usar ingress:
 ```sh 
-    k apply -f repository/svc-lbs/svc_ingress_argocd.yaml
+k apply -f repository/svc-lbs/svc_ingress_argocd.yaml
 ```
 - Olhar cluster:
-    - kubectl get all -n cicd
-- App of Apps: kubectl apply -f https://raw.githubusercontent.com/andreyolv/big_data_k8s/main/bigdatak8s.yaml
-- [http://127.0.0.1:8081/argocd/login](http://127.0.0.1:8081/argocd/login)
-- user: admin
-- password: `kubectl -n cicd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d  | more`
-- caso algo fique como degraded basta deletar, o argo irá recriar novamente. Apenas não delete o cicd/k8sexample
+```sh 
+kubectl get all -n cicd
+```
+- App of Apps: 
+```sh 
+kubectl apply -f https://raw.githubusercontent.com/andreyolv/big_data_k8s/main/bigdatak8s.yaml
+```
+- Loga no ArgoCD:[http://127.0.0.1:8081/argocd/login](http://127.0.0.1:8081/argocd/login)
+  - user: admin
+  - password: ```sh kubectl -n cicd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d  | more```
+- Caso algo fique como degraded basta deletar, o argo irá recriar novamente. Apenas não delete o cicd/k8sexample
