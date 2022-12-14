@@ -3,7 +3,7 @@
 ## [Install prereqs](prereq.md)
 ![prereq](imgs/prereq.png)
 
-## k3d Kubernetes Cluster
+## Kubernetes Cluster k3d
 ```sh 
 k3d cluster create bigdatak8s --volume $HOME/bigdatak8s:/var/lib/rancher/k3s/storage@all -s 1 --servers-memory 4Gb -a 3 --agents-memory 12Gb --api-port 6443 -p 8081:80@loadbalancer
 ```
@@ -13,7 +13,7 @@ k3d cluster create bigdatak8s --volume $HOME/bigdatak8s:/var/lib/rancher/k3s/sto
   - port-foward 80 para 8081
 
 ## Argo CD
-- kubectx k3d-bigdata
+- kubectx k3d-bigdatak8s
 - alias k=kubectl
 - Create namespaces:
 ```sh
