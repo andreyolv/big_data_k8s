@@ -1,7 +1,9 @@
 # big_data_k8s
 
 ## k3d Kubernetes Cluster
-- `k3d cluster create bigdatak8s --volume $HOME/bigdatak8s:/var/lib/rancher/k3s/storage@all -s 1 --servers-memory 4Gb -a 3 --agents-memory 12Gb --api-port 6443 -p 8081:80@loadbalancer`
+```sh 
+k3d cluster create bigdatak8s --volume $HOME/bigdatak8s:/var/lib/rancher/k3s/storage@all -s 1 --servers-memory 4Gb -a 3 --agents-memory 12Gb --api-port 6443 -p 8081:80@loadbalancer
+```
   - storage class: local-path em $HOME/bigdatak8s
   - 1 control plane - 4Gb
   - 3 worker node - 12Gb
@@ -25,7 +27,10 @@ kubectl get all -n cicd
 ```sh 
 kubectl apply -f https://raw.githubusercontent.com/andreyolv/big_data_k8s/main/bigdatak8s.yaml
 ```
-- Loga no ArgoCD:[http://127.0.0.1:8081/argocd/login](http://127.0.0.1:8081/argocd/login)
+- Loga no ArgoCD: [http://127.0.0.1:8081/argocd/login](http://127.0.0.1:8081/argocd/login)
   - user: admin
-  - password: ```sh kubectl -n cicd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d  | more```
+  - password: 
+  ```sh 
+  kubectl -n cicd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d  | more
+  ```
 - Caso algo fique como degraded basta deletar, o argo irá recriar novamente. Apenas não delete o cicd/k8sexample
