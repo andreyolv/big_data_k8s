@@ -21,7 +21,15 @@ k create namespace cicd
 k create namespace database
 k create namespace ingestion
 k create namespace orchestrator
+k create namespace deepstorage
 ```
+
+# Add Helm Repos
+helm repo add argo https://argoproj.github.io/argo-helm
+
+helm install argocd argo/argo-cd --namespace cicd --version 3.26.8
+
+
 - Helm chart do ArgoCD baixado e yaml values alterado para usar ingress (params.server.insecure: true,params.server.rootpath: '/argocd')
 - Atualiza o ArgoCD com yaml values alterado:
 ```sh 
