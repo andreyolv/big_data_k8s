@@ -73,22 +73,22 @@ k apply -f repository/yamls/ingestion/metrics/connect-metrics-config.yaml
 k apply -f repository/yamls/ingestion/metrics/cruise-control-metrics-config.yaml
 
 # ingestion
-k apply -f repository/app-manifests/ingestion/kafka-broker-ephemeral.yaml
-k apply -f repository/app-manifests/ingestion/schema-registry.yaml
-k apply -f repository/app-manifests/ingestion/kafka-connect.yaml
-k apply -f repository/app-manifests/ingestion/cruise-control.yaml
-k apply -f repository/app-manifests/ingestion/kafka-connectors.yaml
+k apply -f repository/manifests/ingestion/kafka-broker-ephemeral.yaml
+k apply -f repository/manifests/ingestion/schema-registry.yaml
+k apply -f repository/manifests/ingestion/kafka-connect.yaml
+k apply -f repository/manifests/ingestion/cruise-control.yaml
+k apply -f repository/manifests/ingestion/kafka-connectors.yaml
 
 # databases
-k apply -f repository/app-manifests/database/mssql.yaml
-k apply -f repository/app-manifests/database/mysql.yaml
-k apply -f repository/app-manifests/database/postgres.yaml
-k apply -f repository/app-manifests/database/mongodb.yaml
-k apply -f repository/app-manifests/database/yugabytedb.yaml
+k apply -f repository/manifests/database/mssql.yaml
+k apply -f repository/manifests/database/mysql.yaml
+k apply -f repository/manifests/database/postgres.yaml
+k apply -f repository/manifests/database/mongodb.yaml
+k apply -f repository/manifests/database/yugabytedb.yaml
 
 # deep storage
-k apply -f repository/app-manifests/deepstorage/minio-operator.yaml
-k apply -f repository/app-manifests/deepstorage/minio.yaml
+k apply -f repository/manifests/deepstorage/minio-operator.yaml
+k apply -f repository/manifests/deepstorage/minio.yaml
 
 # datastore
 k apply -f repository/app-manifests/datastore/pinot.yaml
@@ -98,7 +98,7 @@ k apply -f repository/app-manifests/processing/ksqldb.yaml
 k apply -f repository/app-manifests/processing/trino.yaml
 
 # orchestrator
-k apply -f repository/app-manifests/orchestrator/airflow.yaml
+k apply -f repository/manifests/orchestrator/airflow.yaml
 
 # data ops
 k apply -f repository/app-manifests/lenses/lenses.yaml
