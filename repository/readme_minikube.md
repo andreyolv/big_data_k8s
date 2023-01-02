@@ -1,9 +1,9 @@
 ```sh
-# start kind
-kind create cluster --name bigdatak8s
+# start minikube
+minikube start
 
 # connect into k8s cluster
-kubectx kind-bigdatak8s
+kubectx minikube
 
 # create namespaces
 k create namespace cicd
@@ -37,11 +37,14 @@ helm install argocd argo/argo-cd --namespace cicd --version 3.26.8
 # install argo-cd [gitops]
 # create a load balancer
 k patch svc argocd-server -n cicd -p '{"spec": {"type": "LoadBalancer"}}'
-k patch svc argocd-server -n cicd -p '{"spec": {"type": "LoadBalancer", "externalIPs":["172.31.71.218"]}}'
+
+# other terminal run
+minikube tunnel
 
 # other terminal run port forward
 kubectl port-forward service/argocd-server -n cicd 8080:443
 
+# get password to log into argocd portal
 ARGOCD_LB="127.0.0.1"
 kubens cicd && k get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d | xargs -t -I {} argocd login $ARGOCD_LB --username admin --password {} --insecure
 
@@ -49,13 +52,15 @@ kubens cicd && k get secret argocd-initial-admin-secret -o jsonpath="{.data.pass
 k create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=system:serviceaccount:cicd:argocd-application-controller -n cicd
 
 # register cluster
-CLUSTER="kind-bigdatak8s"
+CLUSTER="minikube"
 argocd cluster add $CLUSTER --in-cluster
 
-# add repo into argo-cd by UI
-
+# add repo into argo-cd repositories
+REPOSITORY="git@github.com:andreyolv/big_data_k8s.git"
+argocd repo add $REPOSITORY --insecure-ignore-host-key --ssh-private-key-path ~/.ssh/id_ed25519
 ```
-kind delete cluster --name bigdatak8s
+
+
 ```sh
 # helm
 helm repo add strimzi https://strimzi.io/charts/
@@ -76,22 +81,22 @@ k apply -f repository/yamls/ingestion/metrics/connect-metrics-config.yaml
 k apply -f repository/yamls/ingestion/metrics/cruise-control-metrics-config.yaml
 
 # ingestion
-k apply -f repository/manifests/ingestion/kafka-broker-ephemeral.yaml
-k apply -f repository/manifests/ingestion/schema-registry.yaml
-k apply -f repository/manifests/ingestion/kafka-connect.yaml
-k apply -f repository/manifests/ingestion/cruise-control.yaml
-k apply -f repository/manifests/ingestion/kafka-connectors.yaml
+k apply -f repository/app-manifests/ingestion/kafka-broker-ephemeral.yaml
+k apply -f repository/app-manifests/ingestion/schema-registry.yaml
+k apply -f repository/app-manifests/ingestion/kafka-connect.yaml
+k apply -f repository/app-manifests/ingestion/cruise-control.yaml
+k apply -f repository/app-manifests/ingestion/kafka-connectors.yaml
 
 # databases
-k apply -f repository/manifests/database/mssql.yaml
-k apply -f repository/manifests/database/mysql.yaml
-k apply -f repository/manifests/database/postgres.yaml
-k apply -f repository/manifests/database/mongodb.yaml
-k apply -f repository/manifests/database/yugabytedb.yaml
+k apply -f repository/app-manifests/database/mssql.yaml
+k apply -f repository/app-manifests/database/mysql.yaml
+k apply -f repository/app-manifests/database/postgres.yaml
+k apply -f repository/app-manifests/database/mongodb.yaml
+k apply -f repository/app-manifests/database/yugabytedb.yaml
 
 # deep storage
-k apply -f repository/manifests/deepstorage/minio-operator.yaml
-k apply -f repository/manifests/deepstorage/minio.yaml
+k apply -f repository/app-manifests/deepstorage/minio-operator.yaml
+k apply -f repository/app-manifests/deepstorage/minio.yaml
 
 # datastore
 k apply -f repository/app-manifests/datastore/pinot.yaml
@@ -101,7 +106,7 @@ k apply -f repository/app-manifests/processing/ksqldb.yaml
 k apply -f repository/app-manifests/processing/trino.yaml
 
 # orchestrator
-k apply -f repository/manifests/orchestrator/airflow.yaml
+k apply -f repository/app-manifests/orchestrator/airflow.yaml
 
 # data ops
 k apply -f repository/app-manifests/lenses/lenses.yaml
